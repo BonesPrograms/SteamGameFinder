@@ -15,7 +15,8 @@ public class SteamGameFinder
         get => _enumerationOptions;
         set => _enumerationOptions = value ?? throw new ArgumentNullException(nameof(EnumerationOptions));
     }
-    EnumerationOptions _enumerationOptions = new()
+    EnumerationOptions _enumerationOptions = _defaultOption;
+    static readonly EnumerationOptions _defaultOption = new()
     {
         IgnoreInaccessible = true,
         RecurseSubdirectories = true,
