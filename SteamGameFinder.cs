@@ -9,11 +9,11 @@ namespace Bones;
 public class SteamGameFinder
 {
     public static readonly string SteamCommonPath = Path.Combine(GetSteamPath(), @"steamapps\common");
-    public string SearchFor => _searchPattern!.Remove(_searchPattern.IndexOf('*'), 1);
-    public EnumerationOptions EnumerationOptions //Should always IgnoreInaccessible if not running in Admin, or will throw
+    public string SearchFor => _searchPattern.Remove(_searchPattern.IndexOf('*'), 1);
+    public EnumerationOptions EnumerationOptions 
     {
         get => _enumerationOptions;
-        set => _enumerationOptions = value ?? throw new NullReferenceException("EnumerationOptions cannot be null!");
+        set => _enumerationOptions = value ?? throw new ArgumentNullException(nameof(EnumerationOptions));
     }
     EnumerationOptions _enumerationOptions = new()
     {
@@ -21,22 +21,26 @@ public class SteamGameFinder
         RecurseSubdirectories = true,
 
     };
-    string? _searchPattern;
-    public SteamGameFinder(string gameName)
+    string _searchPattern;
+    public SteamGameFinder(string exeName)
     {
-        ChangeSearch(this, gameName);
+        _searchPattern = ChangeSearchInternal(exeName);
     }
-    public void ChangeSearch(string gameName)
+
+    /// <summary>
+    /// exeName should be the file name without the .exe extension.
+    /// </summary>
+    public void ChangeSearch(string exeName)
     {
-        ChangeSearch(this, gameName);
+        _searchPattern = ChangeSearchInternal(exeName);
     }
     public string? Find() => Directory.EnumerateFiles(SteamCommonPath, _searchPattern!, EnumerationOptions).FirstOrDefault();
     public string FindOrThrow() => Find() ?? throw new FileNotFoundException($"{SearchFor} not found!");
-    static void ChangeSearch(SteamGameFinder instance, string fileName)
+    static string ChangeSearchInternal(string exeName)
     {
-        if (fileName == null)
-            throw new NullReferenceException("FileName cannot be null!");
-        instance._searchPattern = $"{fileName}*.exe";
+        if (string.IsNullOrWhiteSpace(exeName))
+            throw new ArgumentException("cannot be null or empty!", nameof(exeName));
+        return $"{exeName}*.exe";
     }
     static string GetSteamPath()
     {
@@ -44,7 +48,6 @@ public class SteamGameFinder
         {
             if (key?.GetValue("InstallPath") is string path) return path;
         }
-
         throw new DirectoryNotFoundException("Steam directory not found!");
     }
 }

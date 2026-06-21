@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SteamGameFinder")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6bb42f71e6e198684d9d1f9d6f468b5ba9ecf5f9")]
 [assembly: System.Reflection.AssemblyProductAttribute("SteamGameFinder")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SteamGameFinder")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
